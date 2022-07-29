@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const cookie_parser = require('cookie-parser');
 const auth = require("./middleware/auth");
 const bcrypt = require("bcrypt");
-const url = `mongodb+srv://etracker:Pv05052001@cluster-applications.awneu.mongodb.net/expensestrack?retryWrites=true&w=majority`;
+const url = `mongodb+srv://etracker:${mongo_passwd}@cluster-applications.awneu.mongodb.net/expensestrack?retryWrites=true&w=majority`;
 // const localmongourl = "mongodb://0.0.0.0:27017/hypercube";
 // const port = process.env.PORT;
 const app = express();
