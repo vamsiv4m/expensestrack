@@ -4,9 +4,7 @@
   "description": "Expense Tracker helps us to track the expenses that occurs in daily bases which we can record for future analysis.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "server": "nodemon app.js",
-    "server_dot": "node -r dotenv/config app.js"
+    "start": "node app.js"
   },
   "author": "vamsi",
   "license": "ISC",
