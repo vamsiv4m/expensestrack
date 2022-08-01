@@ -30,6 +30,10 @@ mongoose.connect(url, (err) => {
     }
 });
 
+app.get(`/getUserData`, auth, (req, res) => {
+    // console.log(req.cookies);
+})
+
 //registration
 app.post("/registration", async (req, res) => {
     try {
@@ -93,6 +97,7 @@ app.post("/login", async (req, res) => {
         console.log(e.message);
     }
 })
+
 
 //logout
 app.get('/logout',async(req,res)=>{
