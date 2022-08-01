@@ -1,5 +1,5 @@
 const express = require("express");
-const { port, mongo_passwd } = require("./config");
+// const { port, mongo_passwd } = require("./config");
 const mongoose = require("mongoose");
 const expenseSchema = require("./schemas/ExpenseSchema");
 const CategoryScheme = require("./schemas/CategorySchema")
@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const cookie_parser = require('cookie-parser');
 const auth = require("./middleware/auth");
 const bcrypt = require("bcrypt") ;
-const url = `mongodb+srv://etracker:${mongo_passwd}@cluster-applications.awneu.mongodb.net/expensestrack?retryWrites=true&w=majority`;
+const url = `mongodb+srv://etracker:${process.env.MONGODB_PASSWD}@cluster-applications.awneu.mongodb.net/expensestrack?retryWrites=true&w=majority`;
 // const localmongourl = "mongodb://0.0.0.0:27017/hypercube";
 // const port = process.env.PORT;
 const app = express();
@@ -27,10 +27,6 @@ mongoose.connect(url, (err) => {
         console.log("Connected successfully");
     }
 });
-
-app.get(`/getUserData`, auth, (req, res) => {
-    // console.log(req.cookies);
-})
 
 //registration
 app.post("/registration", async (req, res) => {
@@ -271,6 +267,6 @@ app.get("/getWeeklyData", async (req, res) => {
 }
 )
 
-app.listen(port, () => {
-    console.log(`App Running at ${port}`);
+app.listen(process.env.MONGODB_PASSWD, () => {
+    console.log(`App Running at ${process.env.MONGODB_PASSWD}`);
 })
