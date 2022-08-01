@@ -1,5 +1,7 @@
 const express = require("express");
 // const { port, mongo_passwd } = require("./config");
+const dotenv = require("dotenv");
+dotenv.config();
 const mongoose = require("mongoose");
 const expenseSchema = require("./schemas/ExpenseSchema");
 const CategoryScheme = require("./schemas/CategorySchema")
