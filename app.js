@@ -269,6 +269,6 @@ app.get("/getWeeklyData", async (req, res) => {
 }
 )
 
-app.listen(process.env.MONGODB_PASSWD, () => {
-    console.log(`App Running at ${process.env.MONGODB_PASSWD}`);
+app.listen(process.env.PORT, () => {
+    console.log(`App Running at ${process.env.PORT}`);
 })
