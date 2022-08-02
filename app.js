@@ -30,8 +30,8 @@ mongoose.connect(url, (err) => {
     }
 });
 
-app.get(`/getUserData`, (req, res) => {
-    console.log(req.cookies.jwt);
+app.get(`/getUserData`,auth, (req, res) => {
+    // console.log(req.cookies.jwt);
 })
 
 //registration
