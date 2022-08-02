@@ -106,6 +106,9 @@ app.post("/login", async (req, res) => {
 //logout
 app.get('/logout', auth, async (req, res) => {
     try {
+        req.userdata.tokens = req.userdata.tokens.filter((i)=>{
+            return i.token !==req.token
+        })
         res.clearCookie('token');
         await req.userdata.save();
         res.json({ isLogout: true });
