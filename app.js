@@ -11,7 +11,7 @@ const UserSchema = require("./schemas/UserSchema");
 const jwt = require('jsonwebtoken');
 const cookie_parser = require('cookie-parser');
 const auth = require("./middleware/auth");
-const bcrypt = require("bcrypt") ;
+const bcrypt = require("bcrypt");
 const url = `mongodb+srv://etracker:${process.env.MONGODB_PASSWD}@cluster-applications.awneu.mongodb.net/expensestrack?retryWrites=true&w=majority`;
 // const localmongourl = "mongodb://0.0.0.0:27017/hypercube";
 // const port = process.env.PORT;
@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: "http://localhost:3000",
-    credentials:true
+    credentials: true
 }))
 app.use(cookie_parser());
 mongoose.connect(url, (err) => {
@@ -30,8 +30,10 @@ mongoose.connect(url, (err) => {
     }
 });
 
-app.get(`/getUserData`,auth, (req, res) => {
+app.get(`/getUserData`, auth, (req, res) => {
     // console.log(req.cookies.jwt);
+    const userdata = req.userdata;
+    return res.json({ userId: userdata._id, username: userdata.username, email: userdata.email, isAuthorized: true });
 })
 
 //registration
@@ -44,8 +46,8 @@ app.post("/registration", async (req, res) => {
         if (await UserSchema.findOne({ username: username })) {
             return res.json({ message: `User ${username} already exists.` })
         }
-        else if(password.length<8){
-            return res.json({message:"Password length must be greater than 8 characters"})
+        else if (password.length < 8) {
+            return res.json({ message: "Password length must be greater than 8 characters" })
         }
         else {
             if (password === cpassword) {
@@ -80,14 +82,14 @@ app.post("/login", async (req, res) => {
         if (!userdata) {
             return res.json({ message: "Account not found. Please Register." })
         } else {
-            const result =await bcrypt.compare(password, userdata.cpassword);
+            const result = await bcrypt.compare(password, userdata.cpassword);
             console.log(result);
             if (result) {
                 token = await userdata.generateAuthToken();
                 res.cookie("jwt", token, {
-                    secure:true,
-                    sameSite:'none',
-                    httpOnly:true
+                    secure: true,
+                    sameSite: 'none',
+                    httpOnly: true
                 });
                 return res.json({ isLogin: true })
             }
@@ -102,17 +104,50 @@ app.post("/login", async (req, res) => {
 
 
 //logout
-app.get('/logout',async(req,res)=>{
-    try{
+app.get('/logout', auth, async (req, res) => {
+    try {
         res.clearCookie('jwt');
         await req.userdata.save();
-        res.render('login')
-        // res.json({isLogout:true});
-    }catch(e){
-        res.json({message:e.message})
+        res.json({ isLogout: true });
+    } catch (e) {
+        console.log(e.message);
     }
 })
 
+app.post('/forgot_password', async (req, res) => {
+    try {
+        const data = req.body;
+        const userdata = await UserSchema.findOne({ username: data.data })
+        if (!userdata) {
+            return res.json({ isValid: false });
+        }
+        else {
+            if (data.data === userdata.username) {
+                return res.json({ isValid: true });
+            }
+            else {
+                return res.json({ isValid: false });
+            }
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+})
+
+app.post('/set_password', async (req, res) => {
+    const { cpassword, username } = req.body;
+    try {
+        if (cpassword.length < 8) {
+            return res.json({ message: "Password length must be greater than 8 characters" })
+        }
+        const hashedPassword = await bcrypt.hash(cpassword, 12);
+        await UserSchema.updateOne({ username: username }, { $set: { password: hashedPassword, cpassword: hashedPassword } })
+        res.json({isUpdated:true});
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+})
 
 app.post("/addExpense", async (req, res) => {
     try {
@@ -123,7 +158,6 @@ app.post("/addExpense", async (req, res) => {
     } catch (e) {
         console.log(e.message);
     }
-
 });
 
 app.get("/getExpenses/:id", async (req, res) => {
@@ -201,12 +235,12 @@ app.get("/getMonthlyData1", async (req, res) => {
             $project: {
                 _id: {
                     userId: "$userId",
-                    expense_name : "$expense_name",
-                    price:"$price",
-                    category:"$category",
+                    expense_name: "$expense_name",
+                    price: "$price",
+                    category: "$category",
                     year: { $year: "$date" },
                     month: { $month: "$date" },
-                    date:"$date"
+                    date: "$date"
                 },
                 Total: { $sum: "$price" }
             }
@@ -241,13 +275,13 @@ app.get("/getSevendaysData1", async (req, res) => {
             $project: {
                 _id: {
                     userId: "$userId",
-                    expense_name : "$expense_name",
-                    price:"$price",
-                    category:"$category",
+                    expense_name: "$expense_name",
+                    price: "$price",
+                    category: "$category",
                     dayofweek: { $dayOfWeek: "$date" },
                     week: { $week: "$date" },
                     currentweek: { $week: "$$NOW" },
-                    date:"$date"
+                    date: "$date"
                 },
                 Total: { $sum: "$price" }
             }
