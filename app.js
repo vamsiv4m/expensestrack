@@ -88,7 +88,7 @@ app.post("/login", async (req, res) => {
                 res.cookie("token", token, {
                     secure: true,
                     sameSite: 'none',
-                    httpOnly:true,
+                    // httpOnly:true,
                     // domain:'https://expensestrackapi.herokuapp.com'
                 });
                 return res.json({ isLogin: true })
