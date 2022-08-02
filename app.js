@@ -86,7 +86,8 @@ app.post("/login", async (req, res) => {
                 token = await userdata.generateAuthToken();
                 res.cookie("jwt", token, {
                     secure:true,
-                    sameSite:'none'
+                    sameSite:'none',
+                    httpOnly:true
                 });
                 return res.json({ isLogin: true })
             }
@@ -101,9 +102,15 @@ app.post("/login", async (req, res) => {
 
 
 //logout
-app.get('/logout',async(req,res)=>{
-    res.clearCookie('jwt',{path:'/'});
-    res.json({isLogout:true});
+app.get('/logout',auth,async(req,res)=>{
+    try{
+        res.clearCookie('jwt');
+        await req.userdata.save();
+        res.render('login')
+        // res.json({isLogout:true});
+    }catch(e){
+        res.json({message:e.message})
+    }
 })
 
 

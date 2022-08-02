@@ -8,7 +8,8 @@ const auth = async (req,res,next)=>{
        console.log(process.env.SECRET_KEY);
        console.log("line 8",verifyToken+"");
        const userdata = await UserSchema.findOne({_id:verifyToken.userId});
-       console.log(userdata);
+       req.token = token;
+       req.userdata = userdata;
        next();
        return res.json({userId:userdata._id,username:userdata.username,email:userdata.email,isAuthorized:true});
     }catch(e){
