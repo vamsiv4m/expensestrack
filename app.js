@@ -20,7 +20,6 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: "*",
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
     credentials:true
 }))
 app.use(cookie_parser());
