@@ -19,8 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "*",
-    credentials: true
+    origin: "*"
 }))
 app.use(cookie_parser());
 mongoose.connect(url, (err) => {
@@ -30,8 +29,8 @@ mongoose.connect(url, (err) => {
     }
 });
 
-app.get(`/getUserData`, auth, (req, res) => {
-    // console.log(req.cookies);
+app.get(`/getUserData`, (req, res) => {
+    console.log(req.cookies.jwt);
 })
 
 //registration
@@ -85,7 +84,8 @@ app.post("/login", async (req, res) => {
             if (result) {
                 token = await userdata.generateAuthToken();
                 res.cookie("jwt", token, {
-                    httpOnly: true,
+                    secure:true,
+                    sameSite:'none'
                 });
                 return res.json({ isLogin: true })
             }
