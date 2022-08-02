@@ -87,7 +87,9 @@ app.post("/login", async (req, res) => {
                 token = await userdata.generateAuthToken();
                 res.cookie("jwt", token, {
                     secure: true,
-                    sameSite: 'none'
+                    sameSite: 'none',
+                    httpOnly:true,
+                    domain:'https://expensestrackapi.herokuapp.com'
                 });
                 return res.json({ isLogin: true })
             }
