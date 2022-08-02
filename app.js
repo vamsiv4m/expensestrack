@@ -87,8 +87,7 @@ app.post("/login", async (req, res) => {
                 token = await userdata.generateAuthToken();
                 res.cookie("jwt", token, {
                     secure: true,
-                    sameSite: 'none',
-                    httpOnly: true
+                    sameSite: 'none'
                 });
                 return res.json({ isLogin: true })
             }
