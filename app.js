@@ -106,7 +106,7 @@ app.post("/login", async (req, res) => {
 //logout
 app.get('/logout', auth, async (req, res) => {
     try {
-        res.clearCookie('token',{domain:'https://expensestrackapi.herokuapp.com'});
+        res.clearCookie('token');
         await req.userdata.save();
         res.json({ isLogout: true });
     } catch (e) {
