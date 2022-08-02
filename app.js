@@ -19,7 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","https://expensestrackerv4m.netlify.app"],
     credentials: true
 }))
 app.use(cookie_parser());
@@ -31,7 +31,6 @@ mongoose.connect(url, (err) => {
 });
 
 app.get(`/getUserData`, auth, (req, res) => {
-    // console.log(req.cookies.jwt);
     const userdata = req.userdata;
     return res.json({ userId: userdata._id, username: userdata.username, email: userdata.email, isAuthorized: true });
 })
