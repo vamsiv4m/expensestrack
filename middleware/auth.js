@@ -11,7 +11,6 @@ const auth = async (req,res,next)=>{
        req.token = token;
        req.userdata = userdata;
        next();
-       return res.json({userId:userdata._id,username:userdata.username,email:userdata.email,isAuthorized:true});
     }catch(e){
         res.json({isAuthorized:false,message:e.message});
     }
