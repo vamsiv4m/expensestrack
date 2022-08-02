@@ -102,7 +102,7 @@ app.post("/login", async (req, res) => {
 
 
 //logout
-app.get('/logout',auth,async(req,res)=>{
+app.get('/logout',async(req,res)=>{
     try{
         res.clearCookie('jwt');
         await req.userdata.save();
