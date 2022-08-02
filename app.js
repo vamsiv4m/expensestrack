@@ -19,7 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000","https://expensestrackerv4m.netlify.app"],
+    origin: "https://expensestrackerv4m.netlify.app",
     credentials: true
 }))
 app.use(cookie_parser());
@@ -89,7 +89,7 @@ app.post("/login", async (req, res) => {
                     secure: true,
                     sameSite: 'none',
                     httpOnly:true,
-                    domain:'https://expensestrackapi.herokuapp.com'
+                    // domain:'https://expensestrackapi.herokuapp.com'
                 });
                 return res.json({ isLogin: true })
             }
