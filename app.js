@@ -109,7 +109,7 @@ app.get('/logout', auth, async (req, res) => {
         req.userdata.tokens = req.userdata.tokens.filter((i)=>{
             return i.token !==req.token
         })
-        res.clearCookie('token',{path:'/'},(err)=>{
+        res.clearCookie('token',{sameSite:"none",secure:true},(err)=>{
             if(err){
                 console.log(err);
             }
