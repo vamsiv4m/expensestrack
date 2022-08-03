@@ -10,6 +10,6 @@ const auth = async (req,res,next)=>{
        next();
     }catch(e){
         res.json({isAuthorized:false,message:e.message});
-    }
+    } 
 }
 module.exports = auth;
