@@ -19,7 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:3000',"https://expensestrackerv4m.netlify.app","https://www.expensestrack.me"],
+    origin: ['http://localhost:3000',"https://expensestrackerv4m.netlify.app","https://www.expensestrack.me","https://expensestracktesting.netlify.app"],
     credentials: true
 }))
 app.use(cookie_parser());
@@ -109,7 +109,11 @@ app.get('/logout', auth, async (req, res) => {
         req.userdata.tokens = req.userdata.tokens.filter((i)=>{
             return i.token !==req.token
         })
-        res.clearCookie('token');
+        res.clearCookie('token',{path:'/'},(err)=>{
+            if(err){
+                console.log(err);
+            }
+        });
         await req.userdata.save();
         res.json({ isLogout: true });
     } catch (e) {
