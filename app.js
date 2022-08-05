@@ -19,7 +19,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:3000',"https://expensestrackerv4m.netlify.app","https://www.expensestrack.me","https://expensestracktesting.netlify.app"],
+    origin: ['http://localhost:3000', "https://expensestrackerv4m.netlify.app", "https://www.expensestrack.me", "https://expensestracktesting.netlify.app"],
     credentials: true
 }))
 app.use(cookie_parser());
@@ -87,9 +87,9 @@ app.post("/login", async (req, res) => {
                 token = await userdata.generateAuthToken();
                 res.cookie("token", token, {
                     secure: true,
+                    maxAge: 5259600000,
+                    httpOnly: true,
                     sameSite: 'none',
-                    // httpOnly:true,
-                    // domain:'https://expensestrackapi.herokuapp.com'
                 });
                 return res.json({ isLogin: true })
             }
@@ -106,11 +106,11 @@ app.post("/login", async (req, res) => {
 //logout
 app.get('/logout', auth, async (req, res) => {
     try {
-        req.userdata.tokens = req.userdata.tokens.filter((i)=>{
-            return i.token !==req.token
+        req.userdata.tokens = req.userdata.tokens.filter((i) => {
+            return i.token !== req.token
         })
-        res.clearCookie('token',{sameSite:"none",secure:true},(err)=>{
-            if(err){
+        res.clearCookie('token', { sameSite: "none", secure: true, httpOnly: true }, (err) => {
+            if (err) {
                 console.log(err);
             }
         });
@@ -149,7 +149,7 @@ app.post('/set_password', async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(cpassword, 12);
         await UserSchema.updateOne({ username: username }, { $set: { password: hashedPassword, cpassword: hashedPassword } })
-        res.json({isUpdated:true});
+        res.json({ isUpdated: true });
     }
     catch (e) {
         console.log(e.message);
